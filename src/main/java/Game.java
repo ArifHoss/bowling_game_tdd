@@ -1,5 +1,5 @@
 public class Game {
-    private int[] rolls = new int[20];
+    private int[] rolls = new int[21];
     private int currentRoll = 0;
 
     public void roll(int pinsKnockedDown) {
@@ -8,7 +8,7 @@ public class Game {
 
     public int score() {
         int score = 0;
-        for (int frame = 0; frame < rolls.length; frame++) {
+        for (int frame = 0; frame < 20; frame++) {
             score += rolls[frame];
             score += calculateBonus(frame);
         }

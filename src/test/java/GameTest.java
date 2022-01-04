@@ -32,6 +32,15 @@ public class GameTest {
         assertEquals(14,game.score());
     }
 
+    @Test
+    void spareInLastRoundTest(){
+        multipleRolls(18,0);
+        game.roll(5);
+        game.roll(5);
+        game.roll(2);
+        assertEquals(12,game.score());
+    }
+
 
     private void multipleRolls(int rolling, int pinsKnockedDown) {
         for (int i = 0; i < rolling; i++) {
