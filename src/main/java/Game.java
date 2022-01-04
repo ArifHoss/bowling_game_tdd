@@ -4,7 +4,9 @@ public class Game {
     private int currentRoll = 0;
 
     public void roll(int pinsKnockedDown) {
-        if (isFirstRollInFrame() && pinsKnockedDown == ALL_PINS) {
+        if (isRollInLasFrame()) {
+            rolls[currentRoll++] = pinsKnockedDown;
+        } else if (isFirstRollInFrame() && pinsKnockedDown == ALL_PINS) {
             rolls[currentRoll++] = pinsKnockedDown;
             currentRoll++;
         }else {
@@ -13,34 +15,65 @@ public class Game {
 
     }
 
+    private boolean isRollInLasFrame() {
+        return currentRoll >= 18;
+    }
+
     private boolean isFirstRollInFrame() {
         return currentRoll % 2 == 0;
     }
 
     public int score() {
         int score = 0;
-        for (int frame = 0; frame < 20; frame++) {
-            score += rolls[frame];
-            score += calculateBonus(frame);
+        for (int frame = 0; frame < 10; frame++) {
+            if (isStrike(frame))
+                score+=ALL_PINS+strikeBonus(frame);
+            else if (isSpare(frame))
+                score+=ALL_PINS+spareBonus(frame);
+            else
+            score += frameScore(frame);
+//            score += calculateBonus(frame);
         }
         return score;
     }
 
-    private int calculateBonus(int frame) {
-        if (isStrike(frame)) {
-            return rolls[frame + 2] + rolls[frame + 3];
-
-        } else if (isSpare(frame)) {
-            return rolls[frame + 2];
-        }
-        return 0;
+    private int frameScore(int frame) {
+        return rolls[frameToIndex(frame)] + rolls[frameToIndex(frame)+1];
     }
 
+    private int spareBonus(int frame) {
+        return rolls[frameToIndex(frame)+2];
+    }
+
+    private int strikeBonus(int frame) {
+        if(frame<8 && isStrike(frame+1)) {
+            return rolls[frameToIndex(frame)+2] + rolls[frameToIndex(frame)+4];
+        } else if (frame<=8) {
+            return rolls[frameToIndex(frame)+2] + rolls[frameToIndex(frame)+3];
+        }
+        return rolls[frameToIndex(frame)+1] + rolls[frameToIndex(frame)+2];
+
+    }
+
+    private int frameToIndex(int frame) {
+        return frame *2;
+    }
+
+//    private int calculateBonus(int frame) {
+//        if (isStrike(frame)) {
+//            return rolls[frame + 2] + rolls[frame + 3];
+//
+//        } else if (isSpare(frame)) {
+//            return rolls[frame + 2];
+//        }
+//        return 0;
+//    }
+
     private boolean isStrike(int frame) {
-        return frame % 2 == 0 && rolls[frame] == ALL_PINS;
+        return rolls[frameToIndex(frame)] == ALL_PINS;
     }
 
     private boolean isSpare(int frame) {
-        return frame % 2 == 0 && rolls[frame] + rolls[frame + 1] == ALL_PINS;
+        return rolls[frameToIndex(frame)] + rolls[frameToIndex(frame) + 1] == ALL_PINS;
     }
 }
