@@ -4,26 +4,28 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GameTest {
 
+    private final Game game;
+
+    public GameTest() {
+        game = new Game();
+    }
+
     @Test
     void rolling20TimesWithNoPinsKnockedDownShouldReturnScoreZero() {
-//        arrange del
-        Game game = new Game();
-//        act del
-        for (int i = 0; i < 20; i++) {
-            game.roll(0);
-        }
-
-//        assert del
+        multipleRolls(0);
         assertEquals(0, game.score());
 
     }
 
     @Test
-    void rolling20TimesWithOnePinsKnockedDownShouldReturnScore20(){
-        Game game = new Game();
+    void rolling20TimesWithOnePinsKnockedDownShouldReturnScore20() {
+        multipleRolls(1);
+        assertEquals(20, game.score());
+    }
+
+    private void multipleRolls(int pinsKnockedDown) {
         for (int i = 0; i < 20; i++) {
-            game.roll(1);
+            game.roll(pinsKnockedDown);
         }
-        assertEquals(20,game.score());
     }
 }
