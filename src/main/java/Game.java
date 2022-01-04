@@ -10,14 +10,18 @@ public class Game {
         int score = 0;
         for (int frame = 0; frame < rolls.length; frame++) {
             score += rolls[frame];
-            score = calculateBonus(score, frame);
+            score += calculateBonus(frame);
         }
         return score;
     }
 
-    private int calculateBonus(int score, int frame) {
-        if (frame % 2 == 0 && rolls[frame] + rolls[frame + 1] == 10)
-            score += rolls[frame + 2];
-        return score;
+    private int calculateBonus(int frame) {
+        if (isSpare(frame))
+            return rolls[frame + 2];
+        return 0;
+    }
+
+    private boolean isSpare(int frame) {
+        return frame % 2 == 0 && rolls[frame] + rolls[frame + 1] == 10;
     }
 }
